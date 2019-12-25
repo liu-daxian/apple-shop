@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/apple-commons/apple-commons.iml" filepath="$PROJECT_DIR$/apple-commons/apple-commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apple-dependencies/apple-dependencies.iml" filepath="$PROJECT_DIR$/apple-dependencies/apple-dependencies.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apple-manager/apple-manager.iml" filepath="$PROJECT_DIR$/apple-manager/apple-manager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apple-mappers/apple-mappers.iml" filepath="$PROJECT_DIR$/apple-mappers/apple-mappers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apple-models/apple-models.iml" filepath="$PROJECT_DIR$/apple-models/apple-models.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apple-sale/apple-sale.iml" filepath="$PROJECT_DIR$/apple-sale/apple-sale.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/apple-shop.iml" filepath="$PROJECT_DIR$/.idea/apple-shop.iml" />
+    </modules>
+  </component>
+</project>

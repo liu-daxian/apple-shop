@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qianfeng.ls.mapper.AdminMapper">
+
+    <sql id="adminColumn">
+        aid,aname,aacount,apass,astatus,aphone
+    </sql>
+
+    <select id="login" resultType="adminPojo">
+
+        select
+        <include refid="adminColumn"/>
+        from shop_admin
+        where aacount = #{aacount} and apass = #{apass}
+
+    </select>
+
+    <resultMap id="adminResultMap" type="adminPojo">
+        <id property="aid" column="aid"></id>
+
+        <result property="aname" column="aname"/>
+        <result property="aacount" column="aacount"/>
+        <result property="apass" column="apass"/>
+        <result property="aphone" column="aphone"/>
+        <result property="astatus" column="astatus"/>
+
+        <collection property="roles" ofType="rolePojo">
+            <id property="rid" column="rid"></id>
+            <result property="rname" column="rname"/>
+            <result property="rdesc" column="rdesc"/>
+
+            <collection property="auths" ofType="authPojo">
+                <id property="auid" column="auid"></id>
+                <result property="auname" column="auname"/>
+                <result property="aupath" column="aupath"/>
+                <result property="autype" column="autype"/>
+                <result property="aupid" column="aupid"/>
+            </collection>
+
+        </collection>
+
+    </resultMap>
+
+    <!--根据用户名密码查询用户的角色和权限-->
+    <select id="loginQueryAuth" resultMap="adminResultMap">
+        SELECT a.aid,a.aname,a.aacount,a.apass,a.astatus,a.aphone,ar.rid,r.rname,r.rdesc,ra.auid,au.auname,au.aupath,au.autype,au.aupid FROM shop_admin a
+        LEFT JOIN shop_admin_role ar ON a.aid=ar.aid
+        LEFT JOIN shop_role r ON ar.rid=r.rid
+        LEFT JOIN shop_role_auth ra ON r.rid=ra.rid
+        LEFT JOIN shop_auth au ON ra.auid=au.auid
+        WHERE aacount = #{aacount} and apass = #{apass}
+    </select>
+
+    <!--根据用户id查询用户的角色和权限-->
+    <select id="queryAuthById" resultMap="adminResultMap">
+        SELECT a.aid,a.aname,a.aacount,a.apass,a.astatus,a.aphone,ar.rid,r.rname,r.rdesc,ra.auid,au.auname,au.aupath,au.autype,au.aupid FROM shop_admin a
+        LEFT JOIN shop_admin_role ar ON a.aid=ar.aid
+        LEFT JOIN shop_role r ON ar.rid=r.rid
+        LEFT JOIN shop_role_auth ra ON r.rid=ra.rid
+        LEFT JOIN shop_auth au ON ra.auid=au.auid
+        WHERE aid=#{aid}
+    </select>
+
+    <select id="queryAdminList" resultType="adminPojo">
+        select
+        <include refid="adminColumn"/>
+        from shop_admin
+
+        where astatus != 2
+
+        <if test="null != aname and ''!=aname">
+            and aname like concat('%',#{aname},'%')
+        </if>
+
+        <if test="null != aphone and ''!=aphone">
+            and aphone like concat('%',#{aphone},'%')
+        </if>
+
+        <if test="null != astatus and -1 != astatus">
+            and astatus = #{astatus}
+        </if>
+
+
+    </select>
+
+    <!--   <delete id="delAdmins">
+           delete from shop_admin where aid in
+           <foreach collection="ids" open="(" close=")" separator="," item="id">
+               #{id}
+           </foreach>
+       </delete>-->
+
+    <update id="delAdmins">
+        update shop_admin set astatus=2 where aid in
+        <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </update>
+
+    <!--添加用户并且主键回填-->
+    <insert id="addAdmin" useGeneratedKeys="true" keyProperty="aid">
+        insert into shop_admin(aname,aacount,apass,aphone)
+        values(#{aname},#{aacount},#{apass},#{aphone})
+    </insert>
+
+    <!--给用户绑定角色-->
+    <insert id="bindRoles">
+        insert into shop_admin_role(aid,rid) values
+
+        <foreach collection="roles" item="rid" separator=",">
+            (#{aid},#{rid})
+        </foreach>
+
+    </insert>
+
+
+</mapper>

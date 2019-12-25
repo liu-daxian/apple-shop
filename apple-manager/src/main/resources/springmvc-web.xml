@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 等同于我们spring配置一个 bean -->
+    <!-- <context:annotation-config></context:annotation-config> -->
+
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+    <!-- 等同于配置了若干个bean节点; -->
+    <mvc:annotation-driven></mvc:annotation-driven>
+
+    <!--对静态资源的放行; 127.0.0.1:8080/mg/xxx/abc.css-->
+    <mvc:default-servlet-handler></mvc:default-servlet-handler>
+
+    <!-- spring启动的时候,需要扫描那些包; base 根 -->
+    <context:component-scan base-package="com.qianfeng.ls"></context:component-scan>
+
+    <!-- 配置一个视图解析器 : 我们所有的方法返回的字符串 都会应用这个前后缀!!! -->
+    <!--ViewResovlver启用。视图解析器 -->
+    <!--存放jsp文件的目录位置 prefix:前缀 suffix 后缀 -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!-- 文件上传配置 -->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 设置编码格式 -->
+        <property name="defaultEncoding" value="utf-8"></property>
+        <!-- 设置上传文件总大小，单位字节 -->
+        <property name="maxUploadSize" value="20971520"></property>
+    </bean>
+
+    <!-- 2:配置拦截器 -->
+    <!-- <mvc:interceptors>
+        <bean id="xx" class="com.qfedu.ls.intercept.MyIntercept"></bean>
+    </mvc:interceptors> -->
+
+</beans>

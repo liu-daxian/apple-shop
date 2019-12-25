@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qianfeng.ls.mapper.OrderMapper">
+
+    <!--保存订单信息-->
+    <insert id="createOrder">
+
+        insert into shop_order(oid,aid,addressId,odate,ototal)
+        values(#{oid},#{aid},#{addressId},now(),#{ototal})
+
+    </insert>
+
+    <!--保存订单详情-->
+    <insert id="createOrderDetails">
+
+        insert into shop_order_detail(odid,oid,gid,odprice,odnumber)
+        values
+        <foreach collection="list" separator="," item="detail">
+            (#{detail.odid},#{detail.oid},#{detail.goodsPojo.gid},#{detail.odprice},#{detail.odnumber})
+        </foreach>
+
+    </insert>
+
+    <!--设置我们的订单失效-->
+    <update id="cancelOrder">
+        update shop_order set ostatus=4 where oid = #{oid}
+    </update>
+
+    <update id="apaySuccess">
+        update shop_order set ostatus=2 where oid = #{oid}
+    </update>
+
+</mapper>

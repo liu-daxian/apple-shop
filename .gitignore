@@ -1,0 +1,6 @@
+# Project exclude paths
+/apple-commons/target/
+/apple-manager/target/
+/apple-mappers/target/
+/apple-models/target/
+/apple-sale/target/

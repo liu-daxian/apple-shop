@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qianfeng.ls.mapper.GoodsMapper">
+
+    <resultMap id="goodsPojoResultMap" type="goodsPojo">
+        <id property="gid" column="gid"></id>
+        <result property="gname" column="gname"/>
+        <result property="gimage" column="gimage"/>
+        <result property="gprice" column="gprice"/>
+        <result property="gdesc" column="gdesc"/>
+        <result property="gdiscount" column="gdiscount"/>
+        <result property="isdelete" column="isdelete"/>
+        <result property="glabel" column="glabel"/>
+        <result property="gsex" column="gsex"/>
+        <result property="gtype" column="gtype"/>
+
+        <association property="goodsType" javaType="goodsTypePojo">
+            <id property="tid" column="tid"></id>
+            <result property="tname" column="tname"></result>
+        </association>
+    </resultMap>
+
+    <select id="queryGoodsByPojo" resultMap="goodsPojoResultMap">
+
+        SELECT gid,gname,gimage,gprice,gtype,gdesc,gdiscount,isdelete,glabel,gsex,tid,tname
+        FROM shop_goods g LEFT JOIN shop_goods_type t ON g.gtype = t.tid
+        WHERE isdelete = 0
+
+        <if test="null != gtype and 0 != gtype">
+            AND gtype = #{gtype}
+        </if>
+
+        <if test="null != pricemin and -1 != pricemin">
+            AND gprice &gt;= #{pricemin}
+        </if>
+
+        <if test="null != pricemax and -1 != pricemax">
+            AND gprice &lt;= #{pricemax}
+        </if>
+
+        <if test="null != glabel and -1 != glabel">
+            AND glabel = #{glabel}
+        </if>
+
+        <if test="null != gsex and -1 != gsex">
+            AND gsex = #{gsex}
+        </if>
+
+
+    </select>
+
+    <!--根据商品id查询商品信息-->
+    <select id="queryGoodsById" resultMap="goodsPojoResultMap">
+         SELECT gid,gname,gimage,gprice,gtype,gdesc,gdiscount,isdelete,glabel,gsex,tid,tname
+        FROM shop_goods g LEFT JOIN shop_goods_type t ON g.gtype = t.tid
+        WHERE isdelete = 0 and gid = #{gid}
+    </select>
+
+</mapper>
