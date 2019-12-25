@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.TreeSet;
 
+//商品的控制器
 @Controller
 public class GoodsController{
 
